@@ -3,6 +3,8 @@ import requests
 import smtplib
 import time
 from lxml import etree
+from dotenv import load_dotenv,find_dotenv
+import os
 
 def mercadoPrice(productUrl):
 
@@ -27,16 +29,18 @@ def mercadoPrice(productUrl):
     return price
 # /html/body/main/div[2]/div[3]/div[1]/div[2]/div/div[1]/form/div[1]/div/p/span
 def sendEmail(price, productUrl):
+    load_dotenv(find_dotenv())
     res = requests.get(productUrl)
     res.raise_for_status()
     soup = bs4.BeautifulSoup(res.text, 'html.parser')
     title = soup.title.text.strip()
     dom = etree.HTML(str(soup))
-  
+    gamil_token = os.getenv("secrets")
+
     conn = smtplib.SMTP('smtp.gmail.com', 587) # Se o seu email for do gmail
     conn.ehlo() 
     conn.starttls() 
-    conn.login('danielcruz.alu.lmb@gmail.com', 'ttcufsrumnfwxgsi') # Email e senha
+    conn.login('danielcruz.alu.lmb@gmail.com', gamil_token) # Email e senha
     from_ = 'danielcruz.alu.lmb@gmail.com'
     to_ = 'danielcruz.alu.lmb@gmail.com'
     subject = '{} abaixo do preço estipulado!'.format(title)
