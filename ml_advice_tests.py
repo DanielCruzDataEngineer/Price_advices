@@ -19,7 +19,11 @@ def mercadoPrice(productUrl):
     pricen_str = pricen_str.replace(',', '.')
     pricen_str = pricen_str.replace('\n', '')
     pricen_str = pricen_str.replace('R$', '')
-    
+    try:
+        reviews = dom.xpath('//span[@class="ui-pdp-review__amount"]/text()')[0]
+        print(reviews.strip('['))
+    except:
+        print('erro')
 
     price = float(pricen_str)
     print(price)
@@ -37,16 +41,18 @@ def sendEmail(price, productUrl):
     title = soup.title.text.strip()
     dom = etree.HTML(str(soup))
     gamil_token = os.getenv("secrets")
+    gamil_token_email = os.getenv("email")
 
     conn = smtplib.SMTP('smtp.gmail.com', 587) # Se o seu email for do gmail
     conn.ehlo() 
     conn.starttls() 
-    conn.login('danielcruz.alu.lmb@gmail.com', gamil_token) # Email e senha
+    conn.login(gamil_token_email, gamil_token) # Email e senha
     from_ = 'danielcruz.alu.lmb@gmail.com'
     to_ = 'danielcruz.alu.lmb@gmail.com'
     subject = '{} abaixo do preço estipulado!'.format(title)
     imagem = dom.xpath('//img[@class="ui-pdp-image ui-pdp-gallery__figure__image"]/@src')
-    body = '{} está a R${} no momento.\n Confira no link: {}\nImagem do produto no link :{} \n\n-Mercado Livre Price Bot'.format(title, price, productUrl,imagem)
+    reviews = dom.xpath('//span[@class="ui-pdp-review__amount"]/@text')
+    body = '{} está a R${} no momento.\n Confira no link: {}\nImagem do produto no link :{}\n Reviews:{} \n\n-Mercado Livre Price Bot'.format(title, price, productUrl,imagem,reviews)
     msg = 'Subject: {}\n\n{}'.format(subject, body)
     conn.sendmail(to_, from_, msg.encode('utf-8'))
     print('Email has been sent!')
