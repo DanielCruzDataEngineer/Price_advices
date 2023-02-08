@@ -19,6 +19,7 @@ def mercadoPrice(productUrl):
     pricen_str = pricen_str.replace(',', '.')
     pricen_str = pricen_str.replace('\n', '')
     pricen_str = pricen_str.replace('R$', '')
+    
 
     price = float(pricen_str)
     print(price)
@@ -44,7 +45,8 @@ def sendEmail(price, productUrl):
     from_ = 'danielcruz.alu.lmb@gmail.com'
     to_ = 'danielcruz.alu.lmb@gmail.com'
     subject = '{} abaixo do preço estipulado!'.format(title)
-    body = '{} está a R${} no momento.\n Confira no link: {}\n\n-Mercado Livre Price Bot'.format(title, price, productUrl)
+    imagem = dom.xpath('//img[@class="ui-pdp-image ui-pdp-gallery__figure__image"]/@src')
+    body = '{} está a R${} no momento.\n Confira no link: {}\nImagem do produto no link :{} \n\n-Mercado Livre Price Bot'.format(title, price, productUrl,imagem)
     msg = 'Subject: {}\n\n{}'.format(subject, body)
     conn.sendmail(to_, from_, msg.encode('utf-8'))
     print('Email has been sent!')
@@ -67,7 +69,7 @@ mon_4 = 'https://www.mercadolivre.com.br/monitor-gamer-lg-24mp400-lcd-238-preto-
 
 # Não se esqueça de também adicionar o item aqui, junto com o preço
 itens = [{'url': mon_1, 'price': 599.0, 'email': False, 'store': 'mercado'},
-{'url': mon_2, 'price': 689.0, 'email': False, 'store': 'mercado'}, #689
+{'url': mon_2, 'price': 699.0, 'email': False, 'store': 'mercado'}, #689
 {'url': mon_3, 'price': 759.0, 'email': False, 'store': 'mercado'},
 {'url': mon_4, 'price': 829.0, 'email': False, 'store': 'mercado'}
 ]
