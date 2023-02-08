@@ -23,6 +23,6 @@ jobs:
 
       - name: Run Script
       env:
-        secrets: ${{ secrets.DISCORD_TOKEN }}
+        secrets: ${{ secrets.secrets }}
         run: |
           python ml_advice_tests.py
