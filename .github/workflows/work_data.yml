@@ -22,7 +22,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run Script
-      env:
-        secrets: ${{ secrets.SECRETS }}
+        env:
+          secrets: ${{ secrets.SECRETS }}
         run: |
           python ml_advice_tests.py
