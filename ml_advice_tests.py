@@ -3,21 +3,21 @@ import requests
 import smtplib
 import time
 from lxml import etree
-headers = {'referer': 'https://www.google.com/', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36'}
 
 def mercadoPrice(productUrl):
 
-    res = requests.get(productUrl, headers=headers)
+    res = requests.get(productUrl)
     res.raise_for_status()
     soup = bs4.BeautifulSoup(res.text, 'html.parser')
     dom = etree.HTML(str(soup))
     discount = soup.find('div', class_='price-tag discount-arrow arrow-left')
-    elems = dom.xpath('//div[@class="a-section a-spacing-micro"]//span[@class="a-offscreen"]/text()')[0]
+    elems = dom.xpath('//div[@class="ui-pdp-price__second-line"]//span[@class="andes-money-amount__fraction"]/text()')[0]
     pricen_str = elems.strip()
     pricen_str = pricen_str.replace('.', '') # se for mais que 1.000,00
     pricen_str = pricen_str.replace(',', '.')
     pricen_str = pricen_str.replace('\n', '')
     pricen_str = pricen_str.replace('R$', '')
+
     price = float(pricen_str)
     print(price)
     if discount != None:
@@ -25,15 +25,14 @@ def mercadoPrice(productUrl):
         discount = float(discount[:2])/100
         price = price * (1-discount)
     return price
-
+# /html/body/main/div[2]/div[3]/div[1]/div[2]/div/div[1]/form/div[1]/div/p/span
 def sendEmail(price, productUrl):
-    res = requests.get(productUrl, headers=headers)
+    res = requests.get(productUrl)
     res.raise_for_status()
     soup = bs4.BeautifulSoup(res.text, 'html.parser')
     title = soup.title.text.strip()
     dom = etree.HTML(str(soup))
-    frete = dom.xpath('//div[@id="mir-layout-DELIVERY_BLOCK-slot-PRIMARY_DELIVERY_MESSAGE_LARGE"]//span[@class="a-text-bold"]/text()')[0]
-
+  
     conn = smtplib.SMTP('smtp.gmail.com', 587) # Se o seu email for do gmail
     conn.ehlo() 
     conn.starttls() 
@@ -41,7 +40,7 @@ def sendEmail(price, productUrl):
     from_ = 'danielcruz.alu.lmb@gmail.com'
     to_ = 'danielcruz.alu.lmb@gmail.com'
     subject = '{} abaixo do preço estipulado!'.format(title)
-    body = '{} está a R${} no momento.\n Previsão de frete : {} Confira no link: {}\n\n-Mercado Livre Price Bot'.format(title, price,frete, productUrl)
+    body = '{} está a R${} no momento.\n Confira no link: {}\n\n-Mercado Livre Price Bot'.format(title, price, productUrl)
     msg = 'Subject: {}\n\n{}'.format(subject, body)
     conn.sendmail(to_, from_, msg.encode('utf-8'))
     print('Email has been sent!')
@@ -57,16 +56,16 @@ def checkPrice(itens):
 
 # Itens Mercado Livre:
 # Aqui você pode adicionar quantas URL's quiser, aqui somente alguns exemplos
-mon_1 = 'https://www.amazon.com.br/Monitor-Gamer-AOC-SPEED-75Hz/dp/B08TMTQH9H/ref=d_pd_sbs_sccl_2_2/145-5883709-5729137?pd_rd_w=o5CMs&content-id=amzn1.sym.d5ffa5eb-c14b-4098-a3c1-e33e4cc20b5c&pf_rd_p=d5ffa5eb-c14b-4098-a3c1-e33e4cc20b5c&pf_rd_r=MSEQB8YCV8QAM4KQS287&pd_rd_wg=cNHlm&pd_rd_r=b1010606-f923-4687-9547-8d61df5819b7&pd_rd_i=B08TMTQH9H&psc=1'
-mon_2 = 'https://www.amazon.com.br/Samsung-Monitor-24-F24T350FHL-Preto/dp/B098ZLDFG7/ref=d_pd_sbs_sccl_2_3/145-5883709-5729137?pd_rd_w=o5CMs&content-id=amzn1.sym.d5ffa5eb-c14b-4098-a3c1-e33e4cc20b5c&pf_rd_p=d5ffa5eb-c14b-4098-a3c1-e33e4cc20b5c&pf_rd_r=MSEQB8YCV8QAM4KQS287&pd_rd_wg=cNHlm&pd_rd_r=b1010606-f923-4687-9547-8d61df5819b7&pd_rd_i=B098ZLDFG7&psc=1'
-mon_3 = 'https://www.amazon.com.br/Monitor-LG-Widescreen-24MP400-23-8-Preto/dp/B09HYTW34G/ref=d_pd_sbs_sccl_2_1/145-5883709-5729137?pd_rd_w=pa8yo&content-id=amzn1.sym.d5ffa5eb-c14b-4098-a3c1-e33e4cc20b5c&pf_rd_p=d5ffa5eb-c14b-4098-a3c1-e33e4cc20b5c&pf_rd_r=Z2RG0NW7K43FQNJXXK81&pd_rd_wg=cG6bJ&pd_rd_r=5ad680e1-c7c0-4f3f-b716-50b42e782801&pd_rd_i=B09HYTW34G&psc=1'
-mon_4 = 'https://www.amazon.com.br/Monitor-LG-23-8-Widescreen-Full/dp/B07MTYSFDT/ref=d_pd_sbs_sccl_2_8/145-5883709-5729137?pd_rd_w=YpGbB&content-id=amzn1.sym.d5ffa5eb-c14b-4098-a3c1-e33e4cc20b5c&pf_rd_p=d5ffa5eb-c14b-4098-a3c1-e33e4cc20b5c&pf_rd_r=YKQYNNXSBBZN1BSSPVXN&pd_rd_wg=eU13Q&pd_rd_r=89ee0dc1-2a93-40a8-ad9e-e0a3cdbc97ac&pd_rd_i=B07MTYSFDT&psc=1'
+mon_1 = 'https://produto.mercadolivre.com.br/MLB-3087768923-monitor-led-22-hq-widescreen-vesa-ajuste-de-inclinaco-_JM#position=33&search_layout=grid&type=item&tracking_id=788e07de-37da-428e-a72d-ac4f0a096115'
+mon_2 = 'https://produto.mercadolivre.com.br/MLB-1957277796-monitor-com-bordas-ultrafinas-215-221v8-hdmi-philips-_JM#position=31&search_layout=grid&type=item&tracking_id=199fcff5-ed27-484b-90ec-04879210a753'
+mon_3 = 'https://www.mercadolivre.com.br/monitor-aoc-b1-series-24b1xhm-led-238-preto-90v240v/p/MLB18459540?pdp_filters=seller_id%3A480263032#reco_item_pos=0&reco_backend=machinalis-seller-items-pdp&reco_backend_type=low_level&reco_client=vip-seller_items-above&reco_id=d8fca78d-590a-4345-ad83-4a9e5dc97c95'
+mon_4 = 'https://www.mercadolivre.com.br/monitor-gamer-lg-24mp400-lcd-238-preto-100v240v/p/MLB18910464#reco_item_pos=2&reco_backend=univb-pdp&reco_backend_type=low_level&reco_client=pdp-v2p&reco_id=624cddcf-a1a8-4b66-83ef-511f44fd3a1c'
 
 # Não se esqueça de também adicionar o item aqui, junto com o preço
-itens = [{'url': mon_1, 'price': 836.1, 'email': False, 'store': 'mercado'},
-{'url': mon_2, 'price': 879.0, 'email': False, 'store': 'mercado'}, #899
-{'url': mon_3, 'price': 818.9, 'email': False, 'store': 'mercado'},
-{'url': mon_4, 'price': 799.0, 'email': False, 'store': 'mercado'}
+itens = [{'url': mon_1, 'price': 599.0, 'email': False, 'store': 'mercado'},
+{'url': mon_2, 'price': 689.0, 'email': False, 'store': 'mercado'}, #899
+{'url': mon_3, 'price': 759.0, 'email': False, 'store': 'mercado'},
+{'url': mon_4, 'price': 829.0, 'email': False, 'store': 'mercado'}
 ]
 
 
