@@ -1,8 +1,6 @@
 name: Create an issue on Monday
 
-on:
-  schedule:
-    - cron: '0 9 * * 1' # At 09:00 on Monday
+on: [push]
 
 jobs:
   create_issue:
