@@ -24,6 +24,6 @@ jobs:
       - name: Run Script
         env:
           secrets: ${{ secrets.SECRETS }}
-          secrets_email: ${{ secrets.SECRETS_GMAIL }}
+          secrets_gmail: ${{ secrets.SECRETS_GMAIL }}
         run: |
           python ml_advice_tests.py
