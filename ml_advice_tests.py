@@ -77,7 +77,7 @@ mon_4 = 'https://produto.mercadolivre.com.br/MLB-3175688494-monitor-led-23-full-
 
 # Não se esqueça de também adicionar o item aqui, junto com o preço
 itens = [{'url': mon_1, 'price': 599.0, 'email': False, 'store': 'mercado'},
-{'url': mon_2, 'price': 699.0, 'email': False, 'store': 'mercado'}, #689
+{'url': mon_2, 'price': 689.0, 'email': False, 'store': 'mercado'}, #689
 {'url': mon_3, 'price': 759.0, 'email': False, 'store': 'mercado'},
 {'url': mon_4, 'price': 845.0, 'email': False, 'store': 'mercado'}
 ]
