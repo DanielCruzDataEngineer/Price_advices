@@ -19,11 +19,6 @@ def mercadoPrice(productUrl):
     pricen_str = pricen_str.replace(',', '.')
     pricen_str = pricen_str.replace('\n', '')
     pricen_str = pricen_str.replace('R$', '')
-    try:
-        reviews = dom.xpath('//span[@class="ui-pdp-review__amount"]/text()')[0]
-        print(reviews.strip('['))
-    except:
-        print('erro')
 
     price = float(pricen_str)
     print(price)
@@ -75,7 +70,7 @@ mon_4 = 'https://www.mercadolivre.com.br/monitor-gamer-lg-24mp400-lcd-238-preto-
 
 # Não se esqueça de também adicionar o item aqui, junto com o preço
 itens = [{'url': mon_1, 'price': 599.0, 'email': False, 'store': 'mercado'},
-{'url': mon_2, 'price': 689.0, 'email': False, 'store': 'mercado'}, #689
+{'url': mon_2, 'price': 699.0, 'email': False, 'store': 'mercado'}, #689
 {'url': mon_3, 'price': 759.0, 'email': False, 'store': 'mercado'},
 {'url': mon_4, 'price': 829.0, 'email': False, 'store': 'mercado'}
 ]
