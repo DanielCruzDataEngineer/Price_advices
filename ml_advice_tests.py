@@ -19,7 +19,7 @@ def mercadoPrice(productUrl):
     pricen_str = pricen_str.replace(',', '.')
     pricen_str = pricen_str.replace('\n', '')
     pricen_str = pricen_str.replace('R$', '')
-
+    
     price = float(pricen_str)
     print(price)
     if discount != None:
@@ -28,7 +28,7 @@ def mercadoPrice(productUrl):
         price = price * (1-discount)
     return price
 # /html/body/main/div[2]/div[3]/div[1]/div[2]/div/div[1]/form/div[1]/div/p/span
-def sendEmail(price, productUrl):
+def sendEmail(price, productUrl,preco_calculo,percent):
     load_dotenv(find_dotenv())
     res = requests.get(productUrl)
     res.raise_for_status()
@@ -41,13 +41,17 @@ def sendEmail(price, productUrl):
     conn = smtplib.SMTP('smtp.gmail.com', 587) # Se o seu email for do gmail
     conn.ehlo() 
     conn.starttls() 
+
+ 
     conn.login(gamil_token_email, gamil_token) # Email e senha
+
     from_ = 'danielcruz.alu.lmb@gmail.com'
     to_ = 'danielcruz.alu.lmb@gmail.com'
     subject = '{} abaixo do preço estipulado!'.format(title)
     imagem = dom.xpath('//img[@class="ui-pdp-image ui-pdp-gallery__figure__image"]/@src')
-    reviews = dom.xpath('//span[@class="ui-pdp-review__amount"]/@text')
-    body = '{} está a R${} no momento.\n Confira no link: {}\nImagem do produto no link :{}\n Reviews:{} \n\n-Mercado Livre Price Bot'.format(title, price, productUrl,imagem,reviews)
+
+
+    body = '''{} está a R${} no momento. \n\n Confira no link: {}\n\nImagem do produto no link :{}\n\n Preço diminuiu R$ {} (Ou seja diminiu % {}) \n\n-Mercado Livre Price Bot'''.format(title, price, productUrl,imagem,preco_calculo,percent)
     msg = 'Subject: {}\n\n{}'.format(subject, body)
     conn.sendmail(to_, from_, msg.encode('utf-8'))
     print('Email has been sent!')
@@ -57,8 +61,11 @@ def checkPrice(itens):
     for item in itens:
         if item['email'] != True:
             price = mercadoPrice(item['url'])
+            price_calculos = item['price'] - price
+            percent = round(price_calculos/item['price'] * 100,2)
             if price < item['price']:
-                sendEmail(price, item['url'])
+                
+                sendEmail(price, item['url'],price_calculos,percent)
                 item['email'] = True
 
 # Itens Mercado Livre:
@@ -70,7 +77,7 @@ mon_4 = 'https://produto.mercadolivre.com.br/MLB-3175688494-monitor-led-23-full-
 
 # Não se esqueça de também adicionar o item aqui, junto com o preço
 itens = [{'url': mon_1, 'price': 599.0, 'email': False, 'store': 'mercado'},
-{'url': mon_2, 'price': 689.0, 'email': False, 'store': 'mercado'}, #689
+{'url': mon_2, 'price': 699.0, 'email': False, 'store': 'mercado'}, #689
 {'url': mon_3, 'price': 759.0, 'email': False, 'store': 'mercado'},
 {'url': mon_4, 'price': 845.0, 'email': False, 'store': 'mercado'}
 ]
