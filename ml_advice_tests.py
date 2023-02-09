@@ -36,7 +36,7 @@ def sendEmail(price, productUrl):
     title = soup.title.text.strip()
     dom = etree.HTML(str(soup))
     gamil_token = os.getenv("secrets")
-    gamil_token_email = os.getenv("email")
+    gamil_token_email = os.getenv("secrets_gmail")
 
     conn = smtplib.SMTP('smtp.gmail.com', 587) # Se o seu email for do gmail
     conn.ehlo() 
