@@ -9,3 +9,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
