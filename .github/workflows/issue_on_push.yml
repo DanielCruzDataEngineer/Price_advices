@@ -1,6 +1,8 @@
 name: Create an issue on Monday
 
-on: [push]
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # At 09:00 on Monday
 
 jobs:
   create_issue:
@@ -14,7 +16,7 @@ jobs:
       - name: Create an issue
         uses: actions-ecosystem/action-create-issue@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.github_token }}
           title: ${{ steps.date.outputs.today }}
           body: |
             ## This week's TODO
