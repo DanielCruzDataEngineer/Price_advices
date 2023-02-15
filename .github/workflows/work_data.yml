@@ -26,4 +26,4 @@ jobs:
           secrets: ${{ secrets.SECRETS }}
           secrets_gmail: ${{ secrets.SECRETS_GMAIL }}
         run: |
-          python ML_Prices/MLPrices/
+          python ML_Prices/ML_Prices/
