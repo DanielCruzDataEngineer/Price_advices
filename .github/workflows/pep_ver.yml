@@ -1,0 +1,20 @@
+name: Verificar estilo de código
+
+on: [push, pull_request]
+
+jobs:
+  style-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verificar estilo do código
+        uses: c-hive/gha-pycodestyle@v2.0
+        with:
+          args: .
+      - name: Adicionar nota sobre o estilo do código ao README.md
+        if: ${{ failure() }}
+        run: |
+          echo "## Análise de Estilo de Código" >> README.md
+          echo " " >> README.md
+          echo "A verificação de estilo do código falhou. Por favor, verifique as sugestões de correção abaixo e faça as alterações necessárias." >> README.md
+          echo " " >> README.md
+          pycodestyle --statistics --count . >> README.md
