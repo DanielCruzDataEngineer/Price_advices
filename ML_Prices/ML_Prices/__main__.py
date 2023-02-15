@@ -1,3 +1,4 @@
+"""Main module."""
 import bs4
 import requests
 import smtplib
