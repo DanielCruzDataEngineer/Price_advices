@@ -3,16 +3,6 @@ ML Prices Advice
 ================
 
 
-.. image:: https://img.shields.io/pypi/v/ML_Prices.svg
-        :target: https://pypi.python.org/pypi/ML_Prices
-
-.. image:: https://img.shields.io/travis/DanielCruzDataEngineer/ML_Prices.svg
-        :target: https://travis-ci.com/DanielCruzDataEngineer/ML_Prices
-
-.. image:: https://readthedocs.org/projects/ML-Prices/badge/?version=latest
-        :target: https://ML-Prices.readthedocs.io/en/latest/?version=latest
-        :alt: Documentation Status
-
 
 
 
