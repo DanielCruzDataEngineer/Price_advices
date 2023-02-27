@@ -8,7 +8,7 @@ from dotenv import load_dotenv, find_dotenv
 import os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+from twilio.rest import Client
 
 def mercadoPrice(productUrl):
     res = requests.get(productUrl)
@@ -94,7 +94,35 @@ def sendEmail(price, productUrl, preco_calculo, percent):
     # and message to send - here it is sent as one string.
     s.sendmail(me, you, msg.as_string())
     print("Email enviado")
+def send_msg(price,productUrl,preco_calculo,percent):
+    load_dotenv(find_dotenv())
 
+    res = requests.get(productUrl)
+    res.raise_for_status()
+    soup = bs4.BeautifulSoup(res.text, "html.parser")
+    title = soup.title.text.strip()
+    dom = etree.HTML(str(soup))
+    imagem = str(
+        dom.xpath('//img[@class="ui-pdp-image ui-pdp-gallery__figure__image"]/@src')
+    )
+
+    imagem = imagem.replace("[", "")
+    imagem = imagem.replace("]", "")
+    imagem = imagem.replace("'", "")
+    print(imagem)
+    account_sid = 'AC87eb477cb5737882497da72bf32cdff3'
+    auth_token = os.getenv('twilio_id')
+    client = Client(account_sid, auth_token)
+
+    message = client.messages.create(
+    from_='whatsapp:+14155238886',
+    media_url =[imagem] ,
+    body='{} está a R${} no momento. \n\n Confira no link: {}\n\n Preço diminuiu R$ {} (Ou seja diminiu % {}) \n\n-Mercado Livre Price Bot'.format(
+        title, price, productUrl, preco_calculo, percent),
+    to='whatsapp:+558594199015'
+    )
+
+    print(message.sid)
 
 def checkPrice(itens):
     for item in itens:
@@ -103,7 +131,8 @@ def checkPrice(itens):
             price_calculos = item["price"] - price
             percent = round(price_calculos / item["price"] * 100, 2)
             if price < item["price"]:
-                sendEmail(price, item["url"], price_calculos, percent)
+                # sendEmail(price, item["url"], price_calculos, percent)
+                send_msg(price, item["url"], price_calculos, percent)
                 item["email"] = True
 
 
