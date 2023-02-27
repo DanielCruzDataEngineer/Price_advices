@@ -25,5 +25,6 @@ jobs:
         env:
           secrets: ${{ secrets.SECRETS }}
           secrets_gmail: ${{ secrets.SECRETS_GMAIL }}
+          twilio_id: ${{ secrets.TWILIO }}
         run: |
           python ML_Prices/ML_Prices/
