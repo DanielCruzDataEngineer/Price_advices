@@ -2,6 +2,8 @@
 ML Prices Advice
 ================
 
+.. image:: https://miro.medium.com/max/1400/1*qPPJzefFS8_uMzQw61bZfA.gif
+   :alt: Nome do GIF
 
 
 
