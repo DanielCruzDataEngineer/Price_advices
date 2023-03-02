@@ -11,4 +11,4 @@ Projeto feito em Python, onde há um script de automação de webscrapping , nel
 
 * Free software: MIT license
 
-![Nome do GIF]("https://i.pinimg.com/originals/bf/a9/28/bfa928ce10cac9daa4e96dad113891e1.gif")
+![BigData]("https://i.pinimg.com/originals/bf/a9/28/bfa928ce10cac9daa4e96dad113891e1.gif")
